@@ -16,10 +16,8 @@
  */
 package guru.sfg.brewery.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,7 +33,17 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @Entity
+
 public class Customer extends BaseEntity {
+
+    private String customerName;
+
+    @Type(type = "uuid-char")
+    @Column(length = 36, columnDefinition = "varchar")
+    private UUID apiKey;
+
+    @OneToMany(mappedBy = "customer")
+    private Set<BeerOrder> beerOrders;
 
     @Builder
     public Customer(UUID id, Long version, Timestamp createdDate, Timestamp lastModifiedDate, String customerName,
@@ -46,12 +54,11 @@ public class Customer extends BaseEntity {
         this.beerOrders = beerOrders;
     }
 
-    private String customerName;
-
-    @Column(length = 36, columnDefinition = "varchar")
-    private UUID apiKey;
-
-    @OneToMany(mappedBy = "customer")
-    private Set<BeerOrder> beerOrders;
-
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "customerName='" + customerName + '\'' +
+                ", apiKey=" + apiKey +
+                ", super => " + super.toString() + "}";
+    }
 }

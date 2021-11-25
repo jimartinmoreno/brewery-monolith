@@ -28,15 +28,15 @@ public class BrewBeerListener {
     @Async
     @EventListener
     @Transactional
-    public void listen(BrewBeerEvent event){
-        log.debug("Brewing Beer for " + event.getBeer().getBeerName() );
+    public void listen(BrewBeerEvent event) {
+        log.debug("Brewing Beer for " + event.getBeer().getBeerName());
 
-        Beer beer = beerRepository.getOne(event.getBeer().getId());
+        Beer beer = beerRepository.getById(event.getBeer().getId());
 
         BeerInventory beerInventory = BeerInventory.builder()
-                                        .beer(beer)
-                                        .quantityOnHand(beer.getQuantityToBrew())
-                                        .build();
+                .beer(beer)
+                .quantityOnHand(beer.getQuantityToBrew())
+                .build();
 
         beer.getBeerInventory().add(beerInventory);
 

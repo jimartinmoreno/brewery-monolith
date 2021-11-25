@@ -30,7 +30,7 @@ public class NewInventoryListener {
     @Async
     @EventListener
     @Transactional
-    public void listen(NewInventoryEvent event){
+    public void listen(NewInventoryEvent event) {
         List<BeerOrder> newOrders = beerOrderRepository.findAllByOrderStatus(OrderStatusEnum.NEW);
         List<BeerOrder> readyOrders = beerOrderRepository.findAllByOrderStatus(OrderStatusEnum.READY);
 

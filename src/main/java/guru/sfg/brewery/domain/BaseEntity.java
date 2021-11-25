@@ -19,6 +19,8 @@ package guru.sfg.brewery.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -36,6 +38,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @MappedSuperclass
+@ToString
 public class BaseEntity {
 
     public BaseEntity(UUID id, Long version, Timestamp createdDate, Timestamp lastModifiedDate) {
@@ -47,12 +50,9 @@ public class BaseEntity {
 
     @Id
     @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
-    @Type(type="org.hibernate.type.UUIDCharType")
-    @Column(length = 36, columnDefinition = "varchar", updatable = false, nullable = false )
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Type(type = "org.hibernate.type.UUIDCharType")
+    @Column(length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
     private UUID id;
 
     @Version

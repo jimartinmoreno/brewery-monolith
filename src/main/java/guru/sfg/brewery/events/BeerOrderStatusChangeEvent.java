@@ -34,7 +34,7 @@ public class BeerOrderStatusChangeEvent extends ApplicationEvent {
         return previousStatus;
     }
 
-    public BeerOrder getBeerOrder(){
+    public BeerOrder getBeerOrder() {
         return (BeerOrder) this.source;
     }
 }

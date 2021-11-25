@@ -26,7 +26,7 @@ public class InventoryService {
 
     @Transactional
     @Scheduled(fixedRate = 5000) //run every 5 seconds
-    public void checkInventory(){
+    public void checkInventory() {
         List<Beer> beers = beerRepository.findAll();
 
         beers.forEach(beer -> {
@@ -36,10 +36,10 @@ public class InventoryService {
 
             log.debug("Inv: " + beer.getBeerName() + " : QOH = " + inventory_qoh.get());
 
-            if(beer.getMinOnHand() >= inventory_qoh.get() ) {
+            if (beer.getMinOnHand() >= inventory_qoh.get()) {
                 //brew beer
                 publisher.publishEvent(new BrewBeerEvent(beer));
             }
         });
-     }
+    }
 }

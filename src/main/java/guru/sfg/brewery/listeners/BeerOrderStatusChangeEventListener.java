@@ -40,7 +40,7 @@ public class BeerOrderStatusChangeEventListener {
 
     @Async
     @EventListener
-    public void listen(BeerOrderStatusChangeEvent event){
+    public void listen(BeerOrderStatusChangeEvent event) {
 
         OrderStatusUpdate update = OrderStatusUpdate.builder()
                 .id(event.getBeerOrder().getId())
@@ -52,12 +52,12 @@ public class BeerOrderStatusChangeEventListener {
                 .customerRef(event.getBeerOrder().getCustomerRef())
                 .build();
 
-        try{
+        try {
             log.debug("Posting to callback url");
             if (event.getBeerOrder().getOrderStatusCallbackUrl() != null) {
                 restTemplate.postForObject(event.getBeerOrder().getOrderStatusCallbackUrl(), update, String.class);
             }
-        } catch (Throwable t){
+        } catch (Throwable t) {
             log.error("Error Preforming callback for order: " + event.getBeerOrder().getId(), t);
         }
     }

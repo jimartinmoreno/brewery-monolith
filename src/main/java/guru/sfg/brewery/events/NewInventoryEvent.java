@@ -9,7 +9,7 @@ public class NewInventoryEvent extends ApplicationEvent {
         super(source);
     }
 
-    public Beer getBeer(){
+    public Beer getBeer() {
         return (Beer) this.source;
     }
 }

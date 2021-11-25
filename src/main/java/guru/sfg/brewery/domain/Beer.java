@@ -39,23 +39,9 @@ import java.util.UUID;
  */
 @Getter
 @Setter
-@Entity
 @NoArgsConstructor
+@Entity
 public class Beer extends BaseEntity {
-
-    @Builder
-    public Beer(UUID id, Long version, Timestamp createdDate, Timestamp lastModifiedDate, String beerName,
-                BeerStyleEnum beerStyle, String upc, Integer minOnHand,
-                Integer quantityToBrew, BigDecimal price, Set<BeerInventory> beerInventory) {
-        super(id, version, createdDate, lastModifiedDate);
-        this.beerName = beerName;
-        this.beerStyle = beerStyle;
-        this.upc = upc;
-        this.minOnHand = minOnHand;
-        this.quantityToBrew = quantityToBrew;
-        this.price = price;
-        this.beerInventory = beerInventory;
-    }
 
     private String beerName;
     private BeerStyleEnum beerStyle;
@@ -73,4 +59,20 @@ public class Beer extends BaseEntity {
     @OneToMany(mappedBy = "beer", cascade = CascadeType.ALL)
     @Fetch(FetchMode.JOIN)
     private Set<BeerInventory> beerInventory = new HashSet<>();
+
+    @Builder
+    public Beer(UUID id, Long version, Timestamp createdDate, Timestamp lastModifiedDate, String beerName,
+                BeerStyleEnum beerStyle, String upc, Integer minOnHand,
+                Integer quantityToBrew, BigDecimal price, Set<BeerInventory> beerInventory) {
+        super(id, version, createdDate, lastModifiedDate);
+        this.beerName = beerName;
+        this.beerStyle = beerStyle;
+        this.upc = upc;
+        this.minOnHand = minOnHand;
+        this.quantityToBrew = quantityToBrew;
+        this.price = price;
+        this.beerInventory = beerInventory;
+    }
+
+
 }

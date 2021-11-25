@@ -35,6 +35,15 @@ import java.util.UUID;
 @Entity
 public class BeerOrderLine extends BaseEntity {
 
+    @ManyToOne
+    private BeerOrder beerOrder;
+
+    @ManyToOne
+    private Beer beer;
+
+    private Integer orderQuantity = 0;
+    private Integer quantityAllocated = 0;
+
     @Builder
     public BeerOrderLine(UUID id, Long version, Timestamp createdDate, Timestamp lastModifiedDate,
                          BeerOrder beerOrder, Beer beer, Integer orderQuantity,
@@ -46,12 +55,5 @@ public class BeerOrderLine extends BaseEntity {
         this.quantityAllocated = quantityAllocated;
     }
 
-    @ManyToOne
-    private BeerOrder beerOrder;
 
-    @ManyToOne
-    private Beer beer;
-
-    private Integer orderQuantity = 0;
-    private Integer quantityAllocated = 0;
 }

@@ -34,12 +34,14 @@ import java.util.UUID;
 @Entity
 public class Brewery extends BaseEntity {
 
+    private String breweryName;
+
     @Builder
     public Brewery(UUID id, Long version, Timestamp createdDate, Timestamp lastModifiedDate, String breweryName) {
         super(id, version, createdDate, lastModifiedDate);
         this.breweryName = breweryName;
     }
 
-    private String breweryName;
+
 
 }

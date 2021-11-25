@@ -23,6 +23,7 @@ import guru.sfg.brewery.repositories.BeerRepository;
 import guru.sfg.brewery.repositories.BreweryRepository;
 import guru.sfg.brewery.repositories.CustomerRepository;
 import guru.sfg.brewery.web.model.BeerStyleEnum;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -33,6 +34,7 @@ import java.util.UUID;
  * Created by jt on 2019-01-26.
  */
 @Component
+@Slf4j
 public class DefaultBreweryLoader implements CommandLineRunner {
 
     public static final String TASTING_ROOM = "Tasting Room";
@@ -58,16 +60,21 @@ public class DefaultBreweryLoader implements CommandLineRunner {
     }
 
     private void loadCustomerData() {
+        log.debug("customerRepository.count(): " + customerRepository.count());
+        UUID apikey = UUID.randomUUID();
+        log.debug("apikey: " + apikey);
+        log.debug("apikey: " + apikey.toString());
         if (customerRepository.count() == 0) {
-            customerRepository.save(Customer.builder()
+            Customer savedCustomer = customerRepository.save(Customer.builder()
                     .customerName(TASTING_ROOM)
                     .apiKey(UUID.randomUUID())
                     .build());
+            log.debug("############# savedCustomer: " + savedCustomer);
         }
     }
 
     private void loadBreweryData() {
-        if (breweryRepository.count() == 0){
+        if (breweryRepository.count() == 0) {
             breweryRepository.save(Brewery
                     .builder()
                     .breweryName("Cage Brewing")
@@ -102,7 +109,6 @@ public class DefaultBreweryLoader implements CommandLineRunner {
                     .build();
 
             beerRepository.save(pinball);
-
         }
     }
 }

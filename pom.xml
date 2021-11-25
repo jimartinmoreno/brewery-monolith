@@ -8,62 +8,38 @@
     <parent>
         <groupId>com.github.sfg-beer-works</groupId>
         <artifactId>sfg-beer-works-bom</artifactId>
-        <version>1.0.4</version>
+        <version>1.0.28-SNAPSHOT</version>
     </parent>
 
 <!--    <groupId>sfg.brewery</groupId>-->
     <artifactId>brewery-monolith</artifactId>
     <version>1.0-SNAPSHOT</version>
-
     <description>SFG Brewery Monolith UI</description>
     <name>SFG Brewery Monolith UI</name>
 
-    <licenses>
-        <license>
-            <name>GNU General Public License v3.0</name>
-            <url>https://www.gnu.org/licenses/gpl.txt</url>
-        </license>
-    </licenses>
-
-    <organization>
-        <name>Spring Framework Guru</name>
-    </organization>
-
-    <developers>
-        <developer>
-            <name>John Thompson</name>
-            <organization>Spring Framework Guru</organization>
-        </developer>
-    </developers>
-    
     <properties>
         <!-- Web dependencies -->
         <webjars-bootstrap.version>3.3.6</webjars-bootstrap.version>
-        <webjars-jquery-ui.version>1.12.1</webjars-jquery-ui.version>
+        <webjars-jquery-ui.version>1.13.0</webjars-jquery-ui.version>
         <webjars-jquery.version>3.3.0</webjars-jquery.version>
         <wro4j.version>1.8.0</wro4j.version>
         <!--set this to your docker acct name-->
         <docker.image.prefix>sfgbeerworks</docker.image.prefix>
         <!--Set to name of project-->
-        <docker.image.name>${artifactId}</docker.image.name>
+        <docker.image.name>${project.artifactId}</docker.image.name>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -75,14 +51,7 @@
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-        </dependency>
+
         <!-- webjars -->
         <dependency>
             <groupId>org.webjars</groupId>
@@ -104,6 +73,7 @@
             <version>${webjars-bootstrap.version}</version>
         </dependency>
         <!-- end of webjars -->
+
     </dependencies>
 
     <build>
@@ -137,29 +107,11 @@
                     <dependency>
                         <groupId>org.mockito</groupId>
                         <artifactId>mockito-core</artifactId>
-                        <version>2.23.0</version>
+                        <version>2.23.4</version>
                     </dependency>
                 </dependencies>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
-                <configuration>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.mapstruct</groupId>
-                            <artifactId>mapstruct-processor</artifactId>
-                            <version>${org.mapstruct.version}</version>
-                        </path>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>${org.projectlombok.version}</version>
-                        </path>
-                    </annotationProcessorPaths>
-                </configuration>
-            </plugin>
+
             <plugin>
                 <groupId>io.fabric8</groupId>
                 <artifactId>docker-maven-plugin</artifactId>

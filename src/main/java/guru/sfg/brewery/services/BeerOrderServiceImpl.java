@@ -32,6 +32,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -76,17 +77,20 @@ public class BeerOrderServiceImpl implements BeerOrderService {
         }
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public BeerOrderDto placeOrder(UUID customerId, BeerOrderDto beerOrderDto) {
         Optional<Customer> customerOptional = customerRepository.findById(customerId);
 
+        log.debug("customerOptional isPresent: " + customerOptional.isPresent());
+        log.debug("customerOptional: " + customerOptional);
         if (customerOptional.isPresent()) {
             BeerOrder beerOrder = beerOrderMapper.dtoToBeerOrder(beerOrderDto);
             beerOrder.setId(null); //should not be set by outside client
             beerOrder.setCustomer(customerOptional.get());
             beerOrder.setOrderStatus(OrderStatusEnum.NEW);
 
+            log.debug(" beerOrder.getBeerOrderLines(): " +  beerOrder.getBeerOrderLines());
             beerOrder.getBeerOrderLines().forEach(line -> line.setBeerOrder(beerOrder));
 
             BeerOrder savedBeerOrder = beerOrderRepository.saveAndFlush(beerOrder);
@@ -114,17 +118,17 @@ public class BeerOrderServiceImpl implements BeerOrderService {
         beerOrderRepository.save(beerOrder);
     }
 
-    private BeerOrder getOrder(UUID customerId, UUID orderId){
+    private BeerOrder getOrder(UUID customerId, UUID orderId) {
         Optional<Customer> customerOptional = customerRepository.findById(customerId);
 
-        if(customerOptional.isPresent()){
+        if (customerOptional.isPresent()) {
             Optional<BeerOrder> beerOrderOptional = beerOrderRepository.findById(orderId);
 
-            if(beerOrderOptional.isPresent()){
+            if (beerOrderOptional.isPresent()) {
                 BeerOrder beerOrder = beerOrderOptional.get();
 
                 // fall to exception if customer id's do not match - order not for customer
-                if(beerOrder.getCustomer().getId().equals(customerId)){
+                if (beerOrder.getCustomer().getId().equals(customerId)) {
                     return beerOrder;
                 }
             }

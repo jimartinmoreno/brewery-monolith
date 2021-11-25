@@ -44,25 +44,25 @@ public class OrderHeaderInterceptor extends EmptyInterceptor {
     @Override
     public boolean onFlushDirty(Object entity, Serializable id, Object[] currentState, Object[] previousState, String[] propertyNames, Type[] types) {
 
-        if (entity instanceof BeerOrder){
-            for(Object curObj : currentState){
-                if(curObj instanceof OrderStatusEnum){
-                    for (Object prevObj : previousState){
+        if (entity instanceof BeerOrder) {
+            for (Object curObj : currentState) {
+                if (curObj instanceof OrderStatusEnum) {
+                    for (Object prevObj : previousState) {
                         if (prevObj instanceof OrderStatusEnum) {
                             OrderStatusEnum curStatus = (OrderStatusEnum) curObj;
                             OrderStatusEnum prevStatus = (OrderStatusEnum) prevObj;
 
-                            if(curStatus != prevStatus){
+                            if (curStatus != prevStatus) {
+                                log.debug("<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>");
                                 log.debug("Order status change detected");
-
                                 publisher.publishEvent(new BeerOrderStatusChangeEvent((BeerOrder) entity, prevStatus));
+                                log.debug("<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>");
                             }
                         }
                     }
                 }
             }
         }
-
         return super.onFlushDirty(entity, id, currentState, previousState, propertyNames, types);
     }
 }

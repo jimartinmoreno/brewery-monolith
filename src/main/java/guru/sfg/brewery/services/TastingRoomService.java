@@ -11,6 +11,7 @@ import guru.sfg.brewery.web.model.BeerOrderLineDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -24,7 +25,6 @@ public class TastingRoomService {
 
     private final CustomerRepository customerRepository;
     private final BeerOrderService beerOrderService;
-
     private final BeerRepository beerRepository;
     private final BeerOrderRepository beerOrderRepository;
 
@@ -37,12 +37,14 @@ public class TastingRoomService {
     }
 
     @Transactional
-    @Scheduled(fixedRate = 2000) //run every 2 seconds
-    public void placeTastingRoomOrder(){
+    @Scheduled(fixedRate = 30000) //run every 30 seconds
+    public void placeTastingRoomOrder() {
 
         List<Customer> customerList = customerRepository.findAllByCustomerNameLike(DefaultBreweryLoader.TASTING_ROOM);
 
-        if (customerList.size() == 1){ //should be just one
+        log.debug("customerList >> " + customerList);
+
+        if (customerList.size() == 1) { //should be just one
             doPlaceOrder(customerList.get(0));
         } else {
             log.error("Too many or too few tasting room customers found");
@@ -60,21 +62,25 @@ public class TastingRoomService {
         List<BeerOrderLineDto> beerOrderLineSet = new ArrayList<>();
         beerOrderLineSet.add(beerOrderLine);
 
-        BeerOrderDto beerOrder = BeerOrderDto.builder()
+        BeerOrderDto beerOrderDto = BeerOrderDto.builder()
                 .customerId(customer.getId())
                 .customerRef(UUID.randomUUID().toString())
-               // .orderStatusCallbackUrl("http://localhost:8080/beerorder") //todo update
+                // .orderStatusCallbackUrl("http://localhost:8080/beerorder") //todo update
                 .beerOrderLines(beerOrderLineSet)
                 .build();
 
-        BeerOrderDto savedOrder = beerOrderService.placeOrder(customer.getId(), beerOrder);
+        log.debug("beerOrder >> " + beerOrderDto);
 
+        BeerOrderDto savedOrder = beerOrderService.placeOrder(customer.getId(), beerOrderDto);
+
+        log.debug("-----------------------------------------------------------");
+        log.debug("savedOrder: " + savedOrder);
         log.debug("Saved Tasting Room Order: " + savedOrder.getId());
+        log.debug("-----------------------------------------------------------");
     }
 
     private Beer getRandomBeer() {
         List<Beer> beers = beerRepository.findAll();
-
-        return beers.get(new Random().nextInt(beers.size() -0));
+        return beers.get(new Random().nextInt(beers.size() - 0));
     }
 }

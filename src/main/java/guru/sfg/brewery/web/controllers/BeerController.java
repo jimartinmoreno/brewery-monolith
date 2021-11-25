@@ -4,6 +4,7 @@ package guru.sfg.brewery.web.controllers;
 import guru.sfg.brewery.domain.Beer;
 import guru.sfg.brewery.repositories.BeerInventoryRepository;
 import guru.sfg.brewery.repositories.BeerRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -23,11 +24,12 @@ import java.util.UUID;
 
 @RequestMapping("/beers")
 @Controller
+@Slf4j
 public class BeerController {
 
     //ToDO: Add service
-    private BeerRepository beerRepository;
-    private BeerInventoryRepository beerInventoryRepository;
+    private final BeerRepository beerRepository;
+    private final BeerInventoryRepository beerInventoryRepository;
 
     public BeerController(BeerRepository beerRepository, BeerInventoryRepository beerInventoryRepository) {
         this.beerRepository = beerRepository;
@@ -46,6 +48,7 @@ public class BeerController {
         //ToDO: Add Service
         //ToDO: Get paging data from view
         Page<Beer> pagedResult = beerRepository.findAllByBeerName(beer.getBeerName(), createPageRequest(0, 10, Sort.Direction.DESC, "beerName"));
+
         List<Beer> beerList = pagedResult.getContent();
         if (beerList.isEmpty()) {
             // no beers found
@@ -112,9 +115,9 @@ public class BeerController {
     }
 
     private PageRequest createPageRequest(int page, int size, Sort.Direction sortDirection, String propertyName) {
-        return PageRequest.of(page,
-                size,
-                new Sort(sortDirection, propertyName));
+        List<String> properties = List.of(propertyName);
+        //return PageRequest.of(page, size, sortDirection);
+        return PageRequest.of(page, size, sortDirection, propertyName);
     }
 }
 

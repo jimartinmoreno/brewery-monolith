@@ -23,9 +23,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class BreweryServiceImpl implements BreweryService{
+public class BreweryServiceImpl implements BreweryService {
 
     private BreweryRepository breweryRepository;
+
     public BreweryServiceImpl(BreweryRepository breweryRepository) {
         this.breweryRepository = breweryRepository;
     }
